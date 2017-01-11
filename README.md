@@ -9,7 +9,7 @@ be overridden in order to define comparisons for other classes.
 Add the source as a submodule to your project.
 ```
 $ git submodule add https://github.com/andrewseaman35/py-value-validator.git
-$ git submodule update --init --recursive
+$ git submodule init
 ```
 
 ## Usage
