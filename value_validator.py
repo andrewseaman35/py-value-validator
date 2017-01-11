@@ -21,7 +21,7 @@ class ValueValidator():
         """
         for func_name, comparison in validations:
             if not self._validated(value, func_name, comparison):
-                raise ValidationError("Failed to validate: {} {} {}".format(value, func_name, comparison))
+                raise ValidationError("Failed validation: {} {} {}".format(value, func_name, comparison))
 
 class GenericValidatorFunctions():
     def __init__(self):
