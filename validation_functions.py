@@ -16,7 +16,3 @@ def equal_to(mine, yours):
 
 def not_equal_to(mine, yours):
     return mine != yours
-
-"""String Functions"""
-def contains(mine, yours):
-    return yours in mine
