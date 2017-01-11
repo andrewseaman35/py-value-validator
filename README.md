@@ -1,4 +1,4 @@
-# py-value-validator
+# py_value_validator
 
 This is a Python module that provides an easy way to validate values in
 other projects. The base class provides some generic comparisons and should
