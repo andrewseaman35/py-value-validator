@@ -1,41 +1,48 @@
-from sys import argv, exit as sys_exit
+from sys import argv, exit as _sys_exit
 from functools import partial
 
-def ValidationError(Exception):
+from validation_functions import *
+
+class ValidationError(Exception):
+    """Raised when value is invalid."""
     pass
 
 class ValueValidator():
-    def __init__(self, value):
-        self._value = value
-        self._functions = GenericValidatorFunctions(self._value)
+    def __init__(self, functions):
+        self._functions = functions
 
-    def _validated(self, func_name, compare_to):
+    def _validated(self, value, func_name, compare_to):
         """Performs a single validation."""
-        return self._functions.get(func_name)(compare_to)
+        return self._functions.get(value, func_name)(compare_to)
 
-    def validate(self, validations):
+    def validate(self, value, validations):
         """Validate against a list of validations.
         Validation format: (function_name, right_value)
         """
         for func_name, comparison in validations:
-            if not self._validated(func_name, comparison):
-                raise ValidationError("Failed to validate: {} {} {}".format(self._value, func_name, comparison))
+            if not self._validated(value, func_name, comparison):
+                raise ValidationError("Failed to validate: {} {} {}".format(value, func_name, comparison))
 
 class GenericValidatorFunctions():
-    def __init__(self, value):
-        self._value = value
+    def __init__(self):
         self._functions = {
             'generic': {
-                'less_than': self._value.__lt__,
-                'less_than_equal': self._value.__le__,
-                'greater_than': self._value.__gt__,
-                'greater_than_equal': self._value.__ge__,
-                'equal_to': self._value.__eq__,
+                'less_than': less_than,
+                'less_than_equal': less_than_equal,
+                'greater_than': greater_than,
+                'greater_than_equal': greater_than_equal,
+                'equal_to': equal_to,
+                'not_equal_to': not_equal_to
             }
         }
-        self._add_typed_functions()
+        self.add_typed_functions()
 
-    def _add_typed_functions(self):
+    def _add_function(self, func_type, func_name, func):
+        """Adds a validation function to the dict for the given function type"""
+        self._functions[func_type] = self._functions.get(func_type, {})
+        self._functions[func_type][func_name] = func
+
+    def add_typed_functions(self):
         """Override this method to add typed functions"""
         pass
 
@@ -50,20 +57,20 @@ class GenericValidatorFunctions():
             kwargs['fun_name']
             ))
 
-    def get(self, name):
-        """Returns the requested function for the type of _value.
+    def get(self, value, name):
+        """Returns the requested function for the type of value with value as first parameter.
         First checks _functions[type], if not found, checks _functions['generic'].
         """
-        func = self._functions.get(type(self._value), {}).get(name, None)
+        func = self._functions.get(type(value), {}).get(name, None)
         func = func or self._functions['generic'].get(name, None)
-        func = func or partial(self._default, val_type=type(self._value), fun_name=name)
-        return func
+        func = func or self._default
+        return partial(func, value)
 
     def get_function_list(self, value_type=None):
         """Returns a list of the functions defined for the stored value. Value type can be
         specified as value_type argument.
         """
-        return self._functions.get(value_type or type(self._value), {}).keys()
+        return self._functions.get(value_type, {}).keys()
 
     def list_all(self):
         """Lists all functions associated with a given value."""
@@ -125,7 +132,7 @@ def main():
         print("Usage: python value_validator.py <type>")
         return 2
 
-    functions = ValidatorFunctions(_value)
+    functions = GenericValidatorFunctions()
     functions.list_all()
 
 
@@ -134,4 +141,4 @@ if __name__ == "__main__":
 
     python value_validator.py <type>
     """
-    sys_exit(main())
+    _sys_exit(main())
