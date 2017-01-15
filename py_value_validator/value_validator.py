@@ -1,7 +1,7 @@
 from sys import argv, exit as _sys_exit
 from functools import partial
 
-from .validation_functions import *
+from validation_functions import *
 
 class ValidationError(Exception):
     """Raised when value is invalid."""
