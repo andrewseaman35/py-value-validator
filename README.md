@@ -6,10 +6,9 @@ be overridden in order to define comparisons for other classes.
 
 ## Installation
 
-Add the source as a submodule to your project.
+Install using pip
 ```bash
-$ git submodule add https://github.com/andrewseaman35/py-value-validator.git
-$ git submodule init
+$ pip install py-value-validator
 ```
 
 ## Usage
@@ -18,6 +17,8 @@ By overriding the functions class, validation functions can be added by data typ
 or to the generic function list. Any function that is specified as generic may be
 used by any data of any type being validated.
 ```python
+from py_value_validator.value_validator import GenericValidatorFunctions
+
 class ValidatorFunctions(GenericValidatorFunctions):
     def _add_typed_functions(self):
         self._add_function(str, "contains", contains)
@@ -32,6 +33,8 @@ def is_not_none(mine, yours=None):
 
 Create a validator with an instance of the function class.
 ```python
+from py_value_validator.value_validator import ValueValidator
+
 _validator_functions = ValidatorFunctions()
 validator = ValueValidator(_validator_functions)
 ```
