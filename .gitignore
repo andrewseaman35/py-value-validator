@@ -1,1 +1,5 @@
 *.pyc
+
+# Distribution #
+*.tar.gz
+*.egg-info
