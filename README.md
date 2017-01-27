@@ -1,7 +1,7 @@
 # py_value_validator
 
-This is a Python module that provides an easy way to validate values in
-other projects. The base class provides some generic comparisons and should
+This is a Python module that provides an easy way to validate values. 
+The base class provides some generic comparisons and should
 be overridden in order to define comparisons for other classes. 
 
 ## Installation
